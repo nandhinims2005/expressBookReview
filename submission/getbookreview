@@ -1,2 +1,2 @@
-﻿curl.exe -sS http://localhost:5000/review/8
+﻿curl -sS https://expressbookreview.onrender.com/review/1
 {}

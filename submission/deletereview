@@ -1,2 +1,2 @@
-﻿curl.exe -sS -X DELETE http://localhost:5000/customer/auth/review/8 -H "Authorization: Bearer <TOKEN>"
-{"message":"Review deleted successfully"}
+﻿curl -sS -X DELETE https://expressbookreview.onrender.com/customer/auth/review/1 -H 'Authorization: Bearer <TOKEN>'
+{"message":"Review for ISBN 1 deleted"}

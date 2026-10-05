@@ -1,2 +1,2 @@
-﻿curl.exe -sS -X POST http://localhost:5000/register -H "Content-Type: application/json" -d '{"username":"student-demo","password":"DemoPass123!"}'
-{"message":"User successfully registered"}
+﻿curl -sS -X POST https://expressbookreview.onrender.com/register -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'username=student-demo-20261005' --data-urlencode 'password=DemoPass123!'
+{"message":"User successfully registered. Now you can login"}

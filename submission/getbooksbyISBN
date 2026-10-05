@@ -1,2 +1,2 @@
-﻿curl.exe -sS http://localhost:5000/isbn/8
-{"8":{"author":"Jane Austen","title":"Pride and Prejudice","reviews":{}}}
+﻿curl -sS https://expressbookreview.onrender.com/isbn/8
+{"author":"Jane Austen","title":"Pride and Prejudice","reviews":{}}

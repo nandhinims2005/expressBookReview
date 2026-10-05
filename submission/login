@@ -1,2 +1,2 @@
-﻿curl.exe -sS -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username":"student-demo","password":"DemoPass123!"}'
-{"message":"Login successful","username":"student-demo","token":"\u003credacted; login command returns a live token\u003e"}
+﻿curl -sS -X POST https://expressbookreview.onrender.com/customer/login -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'username=student-demo-20261005' --data-urlencode 'password=DemoPass123!'
+{"message":"Login successful","username":"student-demo-20261005","token":"<copy the actual JWT returned by this command>"}

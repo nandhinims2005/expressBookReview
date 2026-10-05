@@ -1,2 +1,2 @@
-﻿curl.exe -sS http://localhost:5000/title/Pride%20and%20Prejudice
+﻿curl -sS https://expressbookreview.onrender.com/title/Pride%20and%20Prejudice
 {"8":{"author":"Jane Austen","title":"Pride and Prejudice","reviews":{}}}
