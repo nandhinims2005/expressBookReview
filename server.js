@@ -1,8 +1,10 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { randomBytes, scrypt: scryptCallback, timingSafeEqual } = require('node:crypto');
+const { promisify } = require('node:util');
 const books = require('./booksdb.json');
 
+const scrypt = promisify(scryptCallback);
 const app = express();
 const port = Number(process.env.PORT) || 5000;
 const jwtSecret = process.env.JWT_SECRET || 'express-book-review-development-secret';
@@ -13,6 +15,19 @@ app.use(express.urlencoded({ extended: false }));
 
 const asyncHandler = (handler) => (req, res, next) =>
   Promise.resolve(handler(req, res, next)).catch(next);
+
+const hashPassword = async (password) => {
+  const salt = randomBytes(16).toString('hex');
+  const derivedKey = await scrypt(password, salt, 64);
+  return `${salt}:${derivedKey.toString('hex')}`;
+};
+
+const verifyPassword = async (password, storedHash) => {
+  const [salt, expectedHex] = storedHash.split(':');
+  const expected = Buffer.from(expectedHex, 'hex');
+  const actual = await scrypt(password, salt, expected.length);
+  return expected.length > 0 && timingSafeEqual(expected, actual);
+};
 
 const findBooks = (field, value) => {
   const query = String(value).trim().toLocaleLowerCase();
@@ -84,7 +99,7 @@ app.post('/register', asyncHandler(async (req, res) => {
   }
 
   const normalizedUsername = username.trim();
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await hashPassword(password);
   users.set(normalizedUsername, { passwordHash });
   return res.status(201).json({ message: 'User successfully registered. Now you can login' });
 }));
@@ -97,7 +112,7 @@ const login = asyncHandler(async (req, res) => {
 
   const normalizedUsername = username.trim();
   const user = users.get(normalizedUsername);
-  if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+  if (!user || !(await verifyPassword(password, user.passwordHash))) {
     return res.status(401).json({ error: 'Invalid username or password' });
   }
 
