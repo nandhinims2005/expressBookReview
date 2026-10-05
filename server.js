@@ -48,14 +48,14 @@ app.get('/books', (req, res) => res.json(books));
 app.get('/isbn/:isbn', (req, res) => {
   const book = books[req.params.isbn];
   return book
-    ? res.json({ [req.params.isbn]: book })
+    ? res.json(book)
     : res.status(404).json({ error: 'Book not found' });
 });
 
 app.get('/author/:author', (req, res) => {
   const matches = findBooks('author', req.params.author);
   return Object.keys(matches).length
-    ? res.json(matches)
+    ? res.json(Object.values(matches))
     : res.status(404).json({ error: 'No books found for this author' });
 });
 
@@ -86,7 +86,7 @@ app.post('/register', asyncHandler(async (req, res) => {
   const normalizedUsername = username.trim();
   const passwordHash = await bcrypt.hash(password, 10);
   users.set(normalizedUsername, { passwordHash });
-  return res.status(201).json({ message: 'User successfully registered' });
+  return res.status(201).json({ message: 'User successfully registered. Now you can login' });
 }));
 
 const login = asyncHandler(async (req, res) => {
@@ -135,7 +135,7 @@ const deleteReview = (req, res) => {
   }
 
   delete book.reviews[req.username];
-  return res.json({ message: 'Review deleted successfully' });
+  return res.json({ message: `Review for ISBN ${req.params.isbn} deleted` });
 };
 
 app.delete('/customer/auth/review/:isbn', authenticate, deleteReview);

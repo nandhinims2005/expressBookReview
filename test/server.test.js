@@ -20,8 +20,8 @@ test('book lookup and authenticated review lifecycle', async (t) => {
   } = require('../general');
 
   assert.equal(Object.keys(await getAllBooks()).length, 10);
-  assert.equal((await getBookByISBN('8'))['8'].title, 'Pride and Prejudice');
-  assert.ok((await getBooksByAuthor('Jane Austen'))['8']);
+  assert.equal((await getBookByISBN('8')).title, 'Pride and Prejudice');
+  assert.equal((await getBooksByAuthor('Jane Austen'))[0].title, 'Pride and Prejudice');
   assert.ok((await getBooksByTitle('Pride and Prejudice'))['8']);
 
   const booksResponse = await request('/books');
@@ -30,10 +30,10 @@ test('book lookup and authenticated review lifecycle', async (t) => {
 
   const authorResponse = await request('/author/Jane%20Austen');
   assert.equal(authorResponse.status, 200);
-  assert.ok((await authorResponse.json())['8']);
+  assert.equal((await authorResponse.json())[0].title, 'Pride and Prejudice');
 
   const isbnResponse = await request('/isbn/8');
-  assert.equal((await isbnResponse.json())['8'].title, 'Pride and Prejudice');
+  assert.equal((await isbnResponse.json()).title, 'Pride and Prejudice');
 
   const reviewPath = '/customer/auth/review/8';
   assert.equal((await request(reviewPath, { method: 'PUT' })).status, 401);
@@ -45,6 +45,7 @@ test('book lookup and authenticated review lifecycle', async (t) => {
     body: JSON.stringify({ username, password: 'test-password' })
   });
   assert.equal(registerResponse.status, 201);
+  assert.match((await registerResponse.clone().json()).message, /Now you can login/);
 
   const loginResponse = await request('/customer/login', {
     method: 'POST',
@@ -71,5 +72,6 @@ test('book lookup and authenticated review lifecycle', async (t) => {
     headers: { authorization: `Bearer ${token}` }
   });
   assert.equal(deleteResponse.status, 200);
+  assert.equal((await deleteResponse.json()).message, 'Review for ISBN 8 deleted');
   assert.equal((await request('/review/8')).status, 200);
 });
