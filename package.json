@@ -1,0 +1,16 @@
+{
+  "name": "express-book-review",
+  "version": "1.0.0",
+  "description": "Express API for an online bookstore and book reviews",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
