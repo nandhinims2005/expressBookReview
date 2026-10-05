@@ -1,0 +1,2 @@
+﻿curl.exe -sS -X PUT http://localhost:5000/customer/auth/review/8 -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d '{"review":"A thoughtful classic."}'
+{"message":"Review added or updated successfully","reviews":{"student-demo":"A thoughtful classic."}}

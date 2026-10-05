@@ -1,0 +1,2 @@
+﻿curl.exe -sS -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username":"student-demo","password":"DemoPass123!"}'
+{"message":"Login successful","username":"student-demo","token":"\u003credacted; login command returns a live token\u003e"}
